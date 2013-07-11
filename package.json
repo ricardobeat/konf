@@ -1,0 +1,37 @@
+{
+  "name": "konf",
+  "description": "Runtime configuration for node.js apps",
+  "version": "0.3.0",
+  "main": "index.js",
+  "keywords": [
+    "configuration",
+    "config",
+    "heroku",
+    "saas",
+    "environment",
+    "config.json",
+    "process.env"
+  ],
+  "files": [
+    "index.js",
+    "README.md"
+  ],
+  "dependencies": {
+    "flatkeys": "~0.3.1"
+  },
+  "devDependencies": {
+    "mocha": ""
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/ricardobeat/konf.git"
+  },
+  "author": "Ricardo Tomasi <ricardobeat@gmail.com> (http://ricardo.cc)",
+  "license": {
+    "type": "MIT",
+    "url": "http://ricardo.mit-license.org"
+  }
+}
