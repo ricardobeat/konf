@@ -58,13 +58,20 @@ Konf.prototype.defaults = Konf.prototype.set = function (obj) {
 // from describe/defaults.
 
 Konf.prototype.env = function () {
-    var keys = Object.keys(this.schema)
+    var keys = flatKeys(this.schema, { sep: '.' })
       , keysUpper = flatKeys(this.schema, { sep: this.sep, filter: String.prototype.toUpperCase })
       , self = this
 
     Object.keys(process.env).forEach(function(key){
         var index = keysUpper.indexOf(key.toUpperCase())
-        if (index >= 0) self.values[keys[index]] = process.env[key]
+        if (index >= 0) {
+            var parts = keys[index].split('.')
+              , _key = parts.pop()
+              , obj = self.values
+              , part
+            while (part = parts.shift()) obj = obj[part] || (obj[part] = {})
+            obj[_key] = process.env[key]
+        }
     })
     return this
 }
