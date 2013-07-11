@@ -1,6 +1,8 @@
 var util     = require('util')
   , path     = require('path')
   , flatKeys = require('flatkeys')
+  , table    = require('text-table')
+  , colors   = require('colors')
 
 // Konf
 // ----------------------------------------------------------------------------
@@ -83,8 +85,63 @@ Konf.prototype.load = function (file, dir) {
     return this
 }
 
+
+// konf.validate
+// ----------------------------------------------------------------------------
+
+// Checks for missing keys as added in describe() or defaults() calls. Causes the
+// process to exit if a config key is missing.
+
+Konf.prototype.validate = function () {
+    if (this.validated) return this
+
+    var self   = this
+      , opts   = { object: true, sep: '.' }
+      , values = flatKeys(this.values, { object: true, sep: '.' })
+      , schema = flatKeys(this.schema, { object: true, sep: '.' })
+
+    var missing = Object.keys(schema).reduce(function (missing, key) {
+        if (values[key] == null) {
+            missing.push([
+                key.yellow
+              , key.replace('.', '_').toUpperCase().grey
+              , schema[key]
+            ])
+        }
+        return missing
+    }, [])
+
+    if (missing.length > 0) {
+        console.error("\nMissing config vars:\n".red.inverse)
+        console.error(table(missing) + "\n")
+        console.error("Please verify your " + this.lastFile.blue + " file or environment variables.\n")
+        process.exit(1)
+        return
+    }
+
+    this.validated = true
+    return this
+}
+
+
+// konf.get
+// ----------------------------------------------------------------------------
+
+// Get a single value by key.
+
+Konf.prototype.get = function (key) {
+    this.validate()
+    return this.values[key]
+}
+
+
+// konf.toJSON
+// ----------------------------------------------------------------------------
+
 // Return key-value map.
+
 Konf.prototype.toJSON = function () {
+    this.validate()
     return this.values
 }
 

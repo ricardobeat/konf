@@ -8,6 +8,10 @@ A runtime configuration loader for node apps.
 It's purpose is to allow moving seamlessly from configuration files to `process.env` variables. When deploying to SaaS
 platforms like Heroku/Nodejitsu/etc non-versioned file uploads are not a possibility. Konf allows you to fallback to environment variables without any changes to your code.
 
+It's also self-documenting, so users installing your application have clear instructions to follow:
+
+![screenshot](http://f.cl.ly/items/0d3p3z2n1g2I182i1l0K/Image%202013.07.11%203%3A26%3A02%20AM.png)
+
 Usage
 ------
 
@@ -23,14 +27,8 @@ Usage
     }).load('./config').env()
 
 This will attemp to populate the given config values first from `./config.(js|json|coffee)` file and then
-from properties on `process.env`. The correspondent environment keys will be:
-
-    APP_DOMAIN
-    AUTH_CALLBACK
-    TWITTER_KEY
-    TWITTER_SECRET
-
-Note that environment variables are case-insensitive, but they are converted from `camelCase` to `snake_case`.
+from properties on `process.env`. Environment keys are automatically converted from *camelCase* to *snake_case*,
+and are case-insensitive.
 
 #### License
 

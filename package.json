@@ -17,7 +17,9 @@
     "README.md"
   ],
   "dependencies": {
-    "flatkeys": "~0.3.1"
+    "flatkeys": "~0.3.2",
+    "text-table": "~0.1.1",
+    "colors": "~0.6.0-1"
   },
   "devDependencies": {
     "mocha": ""
