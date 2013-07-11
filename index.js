@@ -1,4 +1,5 @@
 var util     = require('util')
+  , path     = require('path')
   , flatKeys = require('flatkeys')
 
 // Konf
@@ -73,8 +74,12 @@ Konf.prototype.env = function () {
 // Load values from file.
 // TODO: load TOML/INI/YAML files
 
-Konf.prototype.load = function (path) {
-    try { this.set(require(path)) } catch (e) {}
+Konf.prototype.load = function (file, dir) {
+    this.lastFile = file
+    var dir  = path.resolve(process.cwd(), dir || '')
+      , file = path.join(dir, file)
+
+    try { this.set(require(file)) } catch (e) {}
     return this
 }
 
