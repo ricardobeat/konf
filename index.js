@@ -43,7 +43,7 @@ Konf.prototype.describe = function (obj) {
 Konf.prototype.defaults = Konf.prototype.set = function (obj) {
     util._extend(this.values, obj)
     Object.keys(this.values).forEach(function(key){
-        if (!(key in this.schema)) this.schema[key] = ''
+        if (!(key in this.schema)) this.schema[key] = '?'
     }.bind(this))
     return this
 }
