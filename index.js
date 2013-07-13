@@ -58,7 +58,7 @@ Konf.prototype.defaults = Konf.prototype.set = function (obj) {
 // from describe/defaults.
 
 Konf.prototype.env = function () {
-    var keys = flatKeys(this.schema, { sep: '.' })
+    var keys = flatKeys(this.schema, { sep: '.', snake: false, filter: false })
       , keysUpper = flatKeys(this.schema, { sep: this.sep, filter: String.prototype.toUpperCase })
       , self = this
 
