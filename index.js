@@ -121,7 +121,9 @@ Konf.prototype.validate = function () {
     if (missing.length > 0) {
         console.error("\nMissing config vars:\n".red.inverse)
         console.error(table(missing) + "\n")
-        console.error("Please verify your " + this.lastFile.blue + " file or environment variables.\n")
+        if (this.lastFile) {
+            console.error("Please verify your " + this.lastFile.blue + " file or environment variables.\n")
+        }
         process.exit(1)
         return
     }
