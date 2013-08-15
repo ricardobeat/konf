@@ -15,14 +15,15 @@ var util     = require('util')
 // platforms like Heroku/Nodejitsu/etc where non-versioned file uploads are not a possibility.
 
 function Konf (options) {
-    options = util._extend(Konf.defaults, options)
-    this.sep = options.sep
+    this.options = util._extend(Konf.defaults, options)
+    this.sep = this.options.sep
     this.schema = {}
     this.values = {}
 }
 
 Konf.defaults = {
     sep: '_'
+  , silent: true
 }
 
 
@@ -31,8 +32,39 @@ Konf.defaults = {
 
 // Set the config keys, use value as description.
 
+function _extend (schema, values, obj, describe) {
+    var keys = Object.keys(obj)
+      , key
+      , value
+
+    for (var i = 0; key = keys[i]; i++) {
+        value = obj[key]
+
+        if (Array.isArray(value)) {
+            schema[key] = value[0]
+            values[key] = value[1]
+            continue
+        }
+
+        if (typeof value === 'object') {
+            !(key in schema) && (schema[key] = {})
+            !(key in values) && (values[key] = {})
+            _extend(schema[key], values[key], value, describe)
+            continue
+        }
+
+        if (describe) {
+            schema[key] = value
+            values[key] = undefined
+        } else {
+            values[key] = value
+            if (!(key in schema)) schema[key] = '?'
+        }
+    }
+}
+
 Konf.prototype.describe = function (obj) {
-    util._extend(this.schema, obj)
+    _extend(this.schema, this.values, obj, true)
     return this
 }
 
@@ -43,10 +75,7 @@ Konf.prototype.describe = function (obj) {
 // Set default values, and add any non-described keys to the schema.
 
 Konf.prototype.defaults = Konf.prototype.set = function (obj) {
-    util._extend(this.values, obj)
-    Object.keys(this.values).forEach(function(key){
-        if (!(key in this.schema)) this.schema[key] = '?'
-    }.bind(this))
+    _extend({}, this.values, obj)
     return this
 }
 
@@ -118,7 +147,7 @@ Konf.prototype.validate = function () {
         return missing
     }, [])
 
-    if (missing.length > 0) {
+    if (!this.options.silent && missing.length > 0) {
         console.error("\nMissing config vars:\n".red.inverse)
         console.error(table(missing) + "\n")
         if (this.lastFile) {

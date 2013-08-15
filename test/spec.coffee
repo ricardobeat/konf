@@ -106,3 +106,38 @@ suite 'precedence', ->
         assert.deepEqual konf.toJSON(), { shadow: 555 }
         konf.load('./test/config2')
         assert.deepEqual konf.toJSON(), { shadow: 222 }
+
+### ----------------------------------------------------------------------- ###
+
+suite 'defaults', ->
+
+    test 'defaults on describe', ->
+        konf = new Konf({ silent: yes }).describe {
+            a: ['Letter A', 'A']
+            b: ['Letter B', 'B']
+            c: 'Letter C'
+            d: 'Letter D'
+            e: {
+                f: 'Letter F'
+                g: ['Letter G', 'G']
+                h: {
+                    i: ['Letter I', 'I']
+                    j: 'Letter J'
+                }
+            }
+        }
+        konf.defaults { d: 'D' }
+        assert.deepEqual konf.toJSON(), {
+            a: 'A'
+            b: 'B'
+            c: undefined
+            d: 'D'
+            e: {
+                f: undefined
+                g: 'G'
+                h: {
+                    i: 'I'
+                    j: undefined
+                }
+            }
+        }
