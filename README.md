@@ -30,6 +30,24 @@ This will attemp to populate the given config values first from `./config.(js|js
 from properties on `process.env`. Environment keys are automatically converted from *camelCase* to *snake_case*,
 and are case-insensitive.
 
+### Defaults
+
+Default values can be set either by calling the `defaults` method:
+
+    var config = new Konf().describe({
+        appname: 'Application name'
+    }).defaults({
+        appname: 'testapp'
+    }).load('./config')
+
+Or, for convenience, by passing a `[description, defaultValue]` array to each key in the `describe` call:
+
+    var config = new Konf().describe({
+        appname: ['Application name', 'testapp']
+    }).load('./config')
+
+Keep in mind that keys with a default value set will not trigger any warnings when missing from specified config files.
+
 #### License
 
 [MIT](http://ricardo.mit-license.org)
