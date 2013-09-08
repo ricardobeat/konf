@@ -5,7 +5,7 @@ A runtime configuration loader for node apps.
 
     npm install konf
 
-It's purpose is to allow moving seamlessly from configuration files to `process.env` variables. When deploying to SaaS
+Its purpose is to allow moving seamlessly from configuration files to `process.env` variables. When deploying to SaaS
 platforms like Heroku/Nodejitsu/etc non-versioned file uploads are not a possibility. Konf allows you to fallback to environment variables without any changes to your code.
 
 It's also self-documenting, so users installing your application have clear instructions to follow:
